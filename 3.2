@@ -1,0 +1,334 @@
+/*******************************************************************
+ * Name: Broc Salvati
+ * Date: November 24th, 2025
+ * Assignment: SDC230 Project Week 3 - Calculator Memory Functions
+ *
+ * Description:
+ * This program is part of a multi-week calculator project. It focuses
+ * on implementing "memory" functionality using both a single stored
+ * numeric value and a collection of up to 10 integer values. The user
+ * can store, retrieve, clear, and replace a single value, as well as
+ * manage a collection of integers (add, remove, view, count, sum,
+ * average, and difference between first and last values).
+ *******************************************************************/
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class App {
+
+    // Single memory value. A null value indicates that nothing is stored.
+    private static Double singleMemory = null;
+
+    // Collection of up to 10 integer values.
+    private static ArrayList<Integer> intMemory = new ArrayList<Integer>();
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        // Header and welcome
+        System.out.println("Your Name - Week 3 Project - Calculator Memory Functions");
+        System.out.println();
+        System.out.println("Welcome to the calculator memory module.");
+        System.out.println("You can store a single value in memory or manage a");
+        System.out.println("collection of up to 10 integer values.");
+        System.out.println("Use the menus to choose an option, and select Quit");
+        System.out.println("when you are finished.");
+        System.out.println();
+
+        boolean quit = false;
+
+        while (!quit) {
+            printMainMenu();
+            int choice = getIntInput(input, "Please select an option: ");
+
+            switch (choice) {
+                case 1:
+                    handleSingleMemoryMenu(input);
+                    break;
+                case 2:
+                    handleCollectionMemoryMenu(input);
+                    break;
+                case 3:
+                    quit = true;
+                    break;
+                default:
+                    System.out.println("Invalid selection. Please try again.");
+                    System.out.println();
+            }
+        }
+
+        System.out.println();
+        System.out.println("Thank you for using the calculator memory application. Goodbye!");
+        input.close();
+    }
+
+    // ---------------------- Main Menu ---------------------------
+
+    private static void printMainMenu() {
+        System.out.println("Main Menu");
+        System.out.println("1) Single-value memory functions");
+        System.out.println("2) Integer collection memory functions");
+        System.out.println("3) Quit");
+    }
+
+    // ----------------- Single-value Memory Menu -----------------
+
+    private static void handleSingleMemoryMenu(Scanner input) {
+        boolean backToMain = false;
+
+        while (!backToMain) {
+            System.out.println();
+            System.out.println("Single-value Memory Menu");
+            System.out.println("1) Store a value in memory");
+            System.out.println("2) Retrieve the value from memory");
+            System.out.println("3) Clear the value in memory");
+            System.out.println("4) Replace the value in memory");
+            System.out.println("5) Return to main menu");
+
+            int choice = getIntInput(input, "Please select an option: ");
+
+            switch (choice) {
+                case 1:
+                    storeSingleValue(input);
+                    break;
+                case 2:
+                    retrieveSingleValue();
+                    break;
+                case 3:
+                    clearSingleValue();
+                    break;
+                case 4:
+                    replaceSingleValue(input);
+                    break;
+                case 5:
+                    backToMain = true;
+                    break;
+                default:
+                    System.out.println("Invalid selection. Please try again.");
+            }
+        }
+    }
+
+    private static void storeSingleValue(Scanner input) {
+        if (singleMemory != null) {
+            System.out.println("A value is already stored in memory: " + singleMemory);
+            System.out.println("Use the Replace option if you want to change it.");
+            return;
+        }
+
+        double value = getDoubleInput(input, "Enter a numeric value to store in memory: ");
+        singleMemory = value;
+        System.out.println("Value stored in memory: " + singleMemory);
+    }
+
+    private static void retrieveSingleValue() {
+        if (singleMemory == null) {
+            System.out.println("No value is currently stored in memory.");
+        } else {
+            System.out.println("The value stored in memory is: " + singleMemory);
+        }
+    }
+
+    private static void clearSingleValue() {
+        singleMemory = null;
+        System.out.println("Memory value cleared.");
+    }
+
+    private static void replaceSingleValue(Scanner input) {
+        if (singleMemory == null) {
+            System.out.println("No value is currently stored. This will act as a store.");
+        }
+        double value = getDoubleInput(input, "Enter a new numeric value to store in memory: ");
+        singleMemory = value;
+        System.out.println("Memory value updated to: " + singleMemory);
+    }
+
+    // --------------- Integer Collection Memory Menu -------------
+
+    private static void handleCollectionMemoryMenu(Scanner input) {
+        boolean backToMain = false;
+
+        while (!backToMain) {
+            System.out.println();
+            System.out.println("Integer Collection Memory Menu");
+            System.out.println("1) Add values to memory (up to 10 total)");
+            System.out.println("2) Display all values stored");
+            System.out.println("3) Display count of values stored");
+            System.out.println("4) Remove an individual value");
+            System.out.println("5) Get sum of all values");
+            System.out.println("6) Get average of all values");
+            System.out.println("7) Get difference of first and last values");
+            System.out.println("8) Return to main menu");
+
+            int choice = getIntInput(input, "Please select an option: ");
+
+            switch (choice) {
+                case 1:
+                    addValuesToCollection(input);
+                    break;
+                case 2:
+                    displayCollectionValues();
+                    break;
+                case 3:
+                    displayCollectionCount();
+                    break;
+                case 4:
+                    removeValueFromCollection(input);
+                    break;
+                case 5:
+                    displayCollectionSum();
+                    break;
+                case 6:
+                    displayCollectionAverage();
+                    break;
+                case 7:
+                    displayFirstLastDifference();
+                    break;
+                case 8:
+                    backToMain = true;
+                    break;
+                default:
+                    System.out.println("Invalid selection. Please try again.");
+            }
+        }
+    }
+
+    private static void addValuesToCollection(Scanner input) {
+        int remaining = 10 - intMemory.size();
+        if (remaining <= 0) {
+            System.out.println("Memory already contains 10 values. Remove some values before adding more.");
+            return;
+        }
+
+        System.out.println("You can add up to " + remaining + " more integer value(s).");
+        int toAdd = getIntInput(input, "How many values would you like to add? ");
+
+        if (toAdd <= 0) {
+            System.out.println("No values will be added.");
+            return;
+        }
+
+        if (toAdd > remaining) {
+            System.out.println("You requested more values than available space.");
+            System.out.println("Only " + remaining + " values will be added.");
+            toAdd = remaining;
+        }
+
+        for (int i = 0; i < toAdd; i++) {
+            int value = getIntInput(input, "Enter integer value " + (i + 1) + ": ");
+            intMemory.add(value);
+        }
+
+        System.out.println("Values added. Current count: " + intMemory.size());
+    }
+
+    private static void displayCollectionValues() {
+        if (intMemory.isEmpty()) {
+            System.out.println("No values stored in memory.");
+            return;
+        }
+
+        System.out.println("Values stored in memory:");
+        System.out.printf("%-6s %-6s%n", "Index", "Value");
+        for (int i = 0; i < intMemory.size(); i++) {
+            System.out.printf("%-6d %-6d%n", i, intMemory.get(i));
+        }
+    }
+
+    private static void displayCollectionCount() {
+        System.out.println("The count of values in memory is: " + intMemory.size());
+    }
+
+    private static void removeValueFromCollection(Scanner input) {
+        if (intMemory.isEmpty()) {
+            System.out.println("No values stored in memory to remove.");
+            return;
+        }
+
+        displayCollectionValues();
+        System.out.println();
+
+        int index = getIntInput(input,
+                "Enter the index of the value to remove (0 to " + (intMemory.size() - 1) + "): ");
+
+        if (index < 0 || index >= intMemory.size()) {
+            System.out.println("Invalid index. No value removed.");
+            return;
+        }
+
+        int removed = intMemory.remove(index);
+        System.out.println("Removed value: " + removed);
+        System.out.println("Current count: " + intMemory.size());
+    }
+
+    private static void displayCollectionSum() {
+        if (intMemory.isEmpty()) {
+            System.out.println("No values stored in memory. Sum is 0.");
+            return;
+        }
+
+        int sum = 0;
+        for (int value : intMemory) {
+            sum += value;
+        }
+
+        System.out.println("The sum of values in memory is: " + sum);
+    }
+
+    private static void displayCollectionAverage() {
+        if (intMemory.isEmpty()) {
+            System.out.println("No values stored in memory. Average is undefined.");
+            return;
+        }
+
+        int sum = 0;
+        for (int value : intMemory) {
+            sum += value;
+        }
+
+        double avg = (double) sum / intMemory.size();
+        System.out.printf("The average of values in memory is: %.2f%n", avg);
+    }
+
+    private static void displayFirstLastDifference() {
+        if (intMemory.isEmpty()) {
+            System.out.println("No values stored in memory. Difference is undefined.");
+            return;
+        }
+
+        if (intMemory.size() == 1) {
+            System.out.println("Only one value stored. Difference between first and last is 0.");
+            return;
+        }
+
+        int first = intMemory.get(0);
+        int last = intMemory.get(intMemory.size() - 1);
+        int diff = first - last;
+
+        System.out.println("First value: " + first);
+        System.out.println("Last value: " + last);
+        System.out.println("Difference (first - last): " + diff);
+    }
+
+    // ---------------------- Input Helpers -----------------------
+
+    private static int getIntInput(Scanner input, String prompt) {
+        System.out.print(prompt);
+        while (!input.hasNextInt()) {
+            System.out.print("Invalid entry. Please enter an integer: ");
+            input.next(); // discard invalid token
+        }
+        return input.nextInt();
+    }
+
+    private static double getDoubleInput(Scanner input, String prompt) {
+        System.out.print(prompt);
+        while (!input.hasNextDouble()) {
+            System.out.print("Invalid entry. Please enter a numeric value: ");
+            input.next(); // discard invalid token
+        }
+        return input.nextDouble();
+    }
+}
