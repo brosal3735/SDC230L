@@ -1,12 +1,11 @@
 /*****************************************************************************************
  * Name: Broc Salvati
- * Date: 11/17/2025
- * Assignment: SDC230 Project Week 1 - Console Calculator
+ * Date: December 15th, 2025
+ * Assignment: SDC230 Project - Console Calculator (Utility Class)
  *
  * Description:
  * SimpleCalculator is a utility class that groups together basic calculator
- * operations for use in the console calculator project. For Week 1 it provides
- * methods for adding integer values and subtracting floating point values.
+ * operations for use in the console calculator project.
  *****************************************************************************************/
 
 public class SimpleCalculator {
@@ -31,5 +30,18 @@ public class SimpleCalculator {
      */
     public static double subtractDoubles(double first, double second) {
         return second - first;
+    }
+
+    /**
+     * Divides one integer by another and returns the result.
+     * Java will throw ArithmeticException if denominator is zero.
+     *
+     * @param numerator   value to be divided
+     * @param denominator value to divide by
+     * @return numerator / denominator
+     * @throws ArithmeticException if denominator is zero
+     */
+    public static int divideIntegers(int numerator, int denominator) throws ArithmeticException {
+        return numerator / denominator;
     }
 }
